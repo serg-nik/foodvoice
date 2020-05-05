@@ -2,6 +2,7 @@ package ru.serg_nik.foodvoice.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Size;
 @Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"})})
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = {"email", "address"})
+@ToString(callSuper = true)
 public class Restaurant extends BaseNamedEntity {
 
     @Email

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS user
     name     VARCHAR(255)            NOT NULL,
     created  TIMESTAMP DEFAULT now() NOT NULL,
     updated  TIMESTAMP               NULL,
-    status   SMALLINT  DEFAULT 1     NOT NULL,
+    status   TINYINT   DEFAULT 1     NOT NULL,
     email    VARCHAR(255) UNIQUE     NOT NULL,
     password VARCHAR(255)            NOT NULL
 );
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS role
     name    VARCHAR(255) UNIQUE     NOT NULL,
     created TIMESTAMP DEFAULT now() NOT NULL,
     updated TIMESTAMP               NULL,
-    status  SMALLINT  DEFAULT 1     NOT NULL
+    status  TINYINT   DEFAULT 1     NOT NULL
 );
 
 COMMENT ON TABLE role
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS restaurant
     name    VARCHAR(255)            NOT NULL,
     created TIMESTAMP DEFAULT now() NOT NULL,
     updated TIMESTAMP               NULL,
-    status  SMALLINT  DEFAULT 1     NOT NULL,
+    status  TINYINT   DEFAULT 1     NOT NULL,
     address VARCHAR(255)            NOT NULL,
     email   VARCHAR(255)            NOT NULL,
     CONSTRAINT uniq_restaurant UNIQUE (name, address)
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS menu
     name            VARCHAR(255)            NOT NULL,
     created         TIMESTAMP DEFAULT now() NOT NULL,
     updated         TIMESTAMP               NULL,
-    status          SMALLINT  DEFAULT 1     NOT NULL,
+    status          TINYINT   DEFAULT 1     NOT NULL,
     restaurant_uuid UUID                    NOT NULL,
     actual          BOOLEAN                 NOT NULL,
     FOREIGN KEY (restaurant_uuid) REFERENCES restaurant (uuid) ON DELETE CASCADE
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS dish
     name      VARCHAR(255)            NOT NULL,
     created   TIMESTAMP DEFAULT now() NOT NULL,
     updated   TIMESTAMP               NULL,
-    status    SMALLINT  DEFAULT 1     NOT NULL,
+    status    TINYINT   DEFAULT 1     NOT NULL,
     menu_uuid UUID                    NOT NULL,
     price     BIGINT                  NOT NULL,
     FOREIGN KEY (menu_uuid) REFERENCES menu (uuid) ON DELETE CASCADE
@@ -248,9 +248,9 @@ CREATE TABLE IF NOT EXISTS voice
     uuid      UUID UNIQUE             NOT NULL,
     created   TIMESTAMP DEFAULT now() NOT NULL,
     updated   TIMESTAMP               NULL,
-    status    SMALLINT  DEFAULT 1     NOT NULL,
+    status    TINYINT   DEFAULT 1     NOT NULL,
     user_uuid UUID                    NOT NULL,
-    date      DATE                    NOT NULL,
+    date      DATE      DEFAULT now() NOT NULL,
     menu_uuid UUID                    NOT NULL,
     FOREIGN KEY (user_uuid) REFERENCES user (uuid),
     FOREIGN KEY (menu_uuid) REFERENCES menu (uuid),

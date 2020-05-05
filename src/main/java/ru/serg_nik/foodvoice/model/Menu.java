@@ -2,6 +2,7 @@ package ru.serg_nik.foodvoice.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "menu")
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = {"restaurant", "actual"})
+@ToString(callSuper = true)
 public class Menu extends BaseNamedEntity {
 
     @ManyToOne

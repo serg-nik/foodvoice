@@ -9,7 +9,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,7 +27,6 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @NotNull
     @CreatedDate
     @Column(name = "created", updatable = false, nullable = false)
     private LocalDateTime created;
@@ -37,9 +35,8 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    @NotNull
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", insertable = false, nullable = false, columnDefinition = "SMALLINT DEFAULT 1 NOT NULL")
     private Status status;
 
 }
