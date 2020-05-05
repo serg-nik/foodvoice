@@ -47,10 +47,9 @@ VALUES ('58b3d8b0-7d08-4274-8aa8-68976d0582ee', 'Месье Колбасье', '
 -- endregion
 
 -- region menu
-INSERT INTO menu(uuid, name, restaurant_uuid, date)
-VALUES ('dd0e6ec6-1532-4219-bab4-2e04a31b6a01', 'Русская кухня', '58b3d8b0-7d08-4274-8aa8-68976d0582ee', '2020-05-05'),
-       ('62e1e74e-ecd7-4d82-a41a-325f91aeddf1', 'Европейская кухня', '01f8e5df-ac2e-4898-b72c-ac62123c21ed',
-        '2020-05-05');
+INSERT INTO menu(uuid, name, restaurant_uuid, actual)
+VALUES ('dd0e6ec6-1532-4219-bab4-2e04a31b6a01', 'Русская кухня', '58b3d8b0-7d08-4274-8aa8-68976d0582ee', 'true'),
+       ('62e1e74e-ecd7-4d82-a41a-325f91aeddf1', 'Европейская кухня', '01f8e5df-ac2e-4898-b72c-ac62123c21ed', 'true');
 -- endregion
 
 -- region dish
@@ -66,7 +65,9 @@ VALUES ('a29de34f-82cb-4fc3-a3f4-7fc37398b987', 'Блины', 'dd0e6ec6-1532-421
 -- endregion
 
 -- region voice
-INSERT INTO voice(user_uuid, menu_uuid)
-VALUES ('0151e05d-3185-4304-b9dd-9fc8f97db290', 'dd0e6ec6-1532-4219-bab4-2e04a31b6a01'),
-       ('f16eb5ea-14bc-42b0-809a-333639464730', '62e1e74e-ecd7-4d82-a41a-325f91aeddf1');
+INSERT INTO voice(uuid, user_uuid, date, menu_uuid)
+VALUES ('46acb07f-a6ca-42c0-9c7c-44a3e3aad71b', '0151e05d-3185-4304-b9dd-9fc8f97db290', '2020-05-05',
+        'dd0e6ec6-1532-4219-bab4-2e04a31b6a01'),
+       ('00813cff-8e50-4a74-9c85-bbbf90d026ae', 'f16eb5ea-14bc-42b0-809a-333639464730', '2020-05-05',
+        '62e1e74e-ecd7-4d82-a41a-325f91aeddf1');
 -- endregion
