@@ -2,22 +2,24 @@ package ru.serg_nik.foodvoice.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "dish")
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = {"menu", "price"})
+@ToString(callSuper = true)
 public class Dish extends BaseNamedEntity {
 
     @ManyToOne
     @JoinColumn(name = "menu_uuid", nullable = false)
     private Menu menu;
 
-    @Null
+    @NotNull
     @Range(min = 0)
     // Стоимость блюда в копейках
     @Column(name = "price")
