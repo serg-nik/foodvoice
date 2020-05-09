@@ -1,6 +1,10 @@
 package ru.serg_nik.foodvoice.test_data;
 
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import ru.serg_nik.foodvoice.meta.Meta;
 import ru.serg_nik.foodvoice.model.User;
 
 import javax.validation.constraints.NotNull;
@@ -9,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import static ru.serg_nik.foodvoice.model.Status.ACTIVE;
+import static ru.serg_nik.foodvoice.model.Status.*;
 import static ru.serg_nik.foodvoice.test_data.RoleTestData.*;
 import static ru.serg_nik.foodvoice.test_data.VoiceTestData.*;
 
@@ -20,12 +24,16 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
     public static final User USER = new User();
     public static final User USER_DELETED = new User();
     public static final User USER_NOT_ACTIVE = new User();
+    public static final Pageable PAGEABLE = PageRequest.of(
+            0, 10, Sort.by(Meta.User.NAME).and(Sort.by(Meta.User.ID_FIELD))
+    );
     public static final List<User> USERS = List.of(ADMIN, USER);
     public static final List<User> USERS_WITH_NOT_ACTIVE = List.of(USER_NOT_ACTIVE, ADMIN, USER);
 
     static {
         ADMIN.setId(UUID.fromString("0151e05d-3185-4304-b9dd-9fc8f97db290"));
         ADMIN.setName("Администратор");
+        ADMIN.setStatus(ACTIVE);
         ADMIN.setEmail("admin@foodvoice.ru");
         ADMIN.setPassword("");
         ADMIN.setRoles(Set.of(ROLE_ADMIN, ROLE_USER));
@@ -33,6 +41,7 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
 
         USER.setId(UUID.fromString("f16eb5ea-14bc-42b0-809a-333639464730"));
         USER.setName("Пользователь");
+        USER.setStatus(ACTIVE);
         USER.setEmail("user@foodvoice.ru");
         USER.setPassword("");
         USER.setRoles(Set.of(ROLE_USER));
@@ -40,6 +49,7 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
 
         USER_DELETED.setId(UUID.fromString("dfa59084-ff1d-4386-a801-fa6f75ccc2c7"));
         USER_DELETED.setName("DELETED");
+        USER_DELETED.setStatus(DELETED);
         USER_DELETED.setEmail("DELETED@foodvoice.ru");
         USER_DELETED.setPassword("");
         USER_DELETED.setRoles(Set.of(ROLE_DELETED));
@@ -47,6 +57,7 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
 
         USER_NOT_ACTIVE.setId(UUID.fromString("acd6aa59-c7f8-4c0f-9b94-18ecc1381cc5"));
         USER_NOT_ACTIVE.setName("NOT_ACTIVE");
+        USER_NOT_ACTIVE.setStatus(NOT_ACTIVE);
         USER_NOT_ACTIVE.setEmail("NOT_ACTIVE@foodvoice.ru");
         USER_NOT_ACTIVE.setPassword("");
         USER_NOT_ACTIVE.setRoles(Set.of(ROLE_NOT_ACTIVE));
@@ -99,6 +110,11 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
     @Override
     public User getDeleted() {
         return USER_DELETED;
+    }
+
+    @Override
+    public Pageable getPageable() {
+        return PAGEABLE;
     }
 
     @Override

@@ -3,53 +3,49 @@ package ru.serg_nik.foodvoice.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import ru.serg_nik.foodvoice.BaseTest;
 import ru.serg_nik.foodvoice.model.BaseEntity;
 import ru.serg_nik.foodvoice.test_data.BaseEntityTestData;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.serg_nik.foodvoice.model.Status.DELETED;
 
-abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTest {
+abstract class BaseEntityJpaRepositoryTest
+        <E extends BaseEntity, R extends BaseEntityJpaRepository<E>, T extends BaseEntityTestData<E>> extends BaseTest {
 
-    protected final BaseEntityJpaRepository<T> repository;
-    protected final BaseEntityTestData<T> testData;
-    protected final PageRequest pageRequest;
+    protected final R repository;
+    protected final T testData;
 
-    BaseEntityJpaRepositoryTest(BaseEntityJpaRepository<T> repository, BaseEntityTestData<T> testData,
-                                PageRequest pageRequest) {
+    BaseEntityJpaRepositoryTest(R repository, T testData) {
         this.repository = repository;
         this.testData = testData;
-        this.pageRequest = pageRequest;
     }
 
     @Test
     void persist() {
-        T persisted = repository.save(testData.getNew());
+        E persisted = repository.save(testData.getNew());
         assertNotNull(persisted);
-        Optional<T> found = repository.findById(persisted.getId());
+        Optional<E> found = repository.findById(persisted.getId());
         assertTrue(found.isPresent());
         assertTrue(testData.equals(persisted, found.get()));
     }
 
     @Test
     void update() {
-        T updated = testData.getUpdated();
+        E updated = testData.getUpdated();
 
-        Optional<T> beforeUpdate = repository.findById(updated.getId());
+        Optional<E> beforeUpdate = repository.findById(updated.getId());
         assertTrue(beforeUpdate.isPresent());
 
-        T expected = testData.getEmpty();
+        E expected = testData.getEmpty();
         BeanUtils.copyProperties(beforeUpdate.get(), expected);
 
         repository.save(updated);
 
-        Optional<T> afterUpdate = repository.findById(updated.getId());
+        Optional<E> afterUpdate = repository.findById(updated.getId());
         assertTrue(afterUpdate.isPresent());
         assertTrue(testData.equals(updated, afterUpdate.get()));
         assertFalse(testData.equals(expected, afterUpdate.get()));
@@ -57,49 +53,47 @@ abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTes
 
     @Test
     void findFirstActive() {
-        Optional<T> optional = repository.findById(testData.getFirstActive().getId());
+        Optional<E> optional = repository.findById(testData.getFirstActive().getId());
         assertTrue(optional.isPresent());
         assertTrue(testData.equals(testData.getFirstActive(), optional.get()));
     }
 
     @Test
     void findSecondActive() {
-        Optional<T> optional = repository.findById(testData.getSecondActive().getId());
+        Optional<E> optional = repository.findById(testData.getSecondActive().getId());
         assertTrue(optional.isPresent());
         assertTrue(testData.equals(testData.getSecondActive(), optional.get()));
     }
 
     @Test
     void findNotActive() {
-        Optional<T> optional = repository.findByIdWithNotActive(testData.getNotActive().getId());
+        Optional<E> optional = repository.findByIdWithNotActive(testData.getNotActive().getId());
         assertTrue(optional.isPresent());
         assertTrue(testData.equals(testData.getNotActive(), optional.get()));
     }
 
     @Test
     void notFoundNotActive() {
-        Optional<T> optional = repository.findById(testData.getNotActive().getId());
+        Optional<E> optional = repository.findById(testData.getNotActive().getId());
         assertTrue(optional.isEmpty());
     }
 
     @Test
     void notFoundDeleted() {
-        Optional<T> optional = repository.findById(testData.getDeleted().getId());
+        Optional<E> optional = repository.findById(testData.getDeleted().getId());
         assertTrue(optional.isEmpty());
     }
 
     @Test
     void findAllActive() {
-        Page<T> page = repository.findAll(pageRequest);
-        assertEquals(testData.getAll().size(), page.getContent().size());
-        containsAllWithSorting(testData.getAll(), page.getContent());
+        Page<E> page = repository.findAll(testData.getPageable());
+        equalsWithSorting(testData.getAll(), page.getContent());
     }
 
     @Test
     void findAllNotActive() {
-        Page<T> page = repository.findAllWithNotActive(pageRequest);
-        assertEquals(testData.getAllWithNotActive().size(), page.getContent().size());
-        containsAllWithSorting(testData.getAllWithNotActive(), page.getContent());
+        Page<E> page = repository.findAllWithNotActive(testData.getPageable());
+        equalsWithSorting(testData.getAllWithNotActive(), page.getContent());
     }
 
     @Test
@@ -120,12 +114,6 @@ abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTes
         assertFalse(repository.findAll().isEmpty());
         repository.deleteAll();
         assertTrue(repository.findAll().isEmpty());
-    }
-
-    private void containsAllWithSorting(List<T> expected, List<T> actual) {
-        for (int i = 0; i < expected.size(); i++) {
-            assertEquals(expected.get(i), actual.get(i));
-        }
     }
 
 }

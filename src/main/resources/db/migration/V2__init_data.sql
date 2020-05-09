@@ -64,7 +64,9 @@ VALUES ('8bad8470-06bb-4b15-b98b-95745152875b', 'DELETED', 0, 'DELETED', 'DELETE
 -- region menu
 INSERT INTO menu(uuid, name, restaurant_uuid, actual)
 VALUES ('dd0e6ec6-1532-4219-bab4-2e04a31b6a01', 'Русская кухня', '58b3d8b0-7d08-4274-8aa8-68976d0582ee', 'true'),
-       ('62e1e74e-ecd7-4d82-a41a-325f91aeddf1', 'Европейская кухня', '01f8e5df-ac2e-4898-b72c-ac62123c21ed', 'true');
+       ('fbb9b1a5-a599-4574-954c-27b52a95be2a', 'Русское меню', '58b3d8b0-7d08-4274-8aa8-68976d0582ee', 'false'),
+       ('62e1e74e-ecd7-4d82-a41a-325f91aeddf1', 'Европейская кухня', '01f8e5df-ac2e-4898-b72c-ac62123c21ed', 'true'),
+       ('d66a3d54-85b0-4e51-b2f8-372963bbacf7', 'Европейское меню', '01f8e5df-ac2e-4898-b72c-ac62123c21ed', 'false');
 
 INSERT INTO menu(uuid, name, status, restaurant_uuid, actual)
 VALUES ('7df4e03b-3058-4470-b5df-6ccff74effb6', 'DELETED', 0, '8bad8470-06bb-4b15-b98b-95745152875b', 'true'),

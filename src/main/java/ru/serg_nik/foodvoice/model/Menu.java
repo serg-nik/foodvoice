@@ -7,12 +7,16 @@ import ru.serg_nik.foodvoice.meta.Meta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = Meta.Menu.TABLE_NAME)
 @Data
-@EqualsAndHashCode(callSuper = true, exclude = {"restaurant", "actual"})
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"restaurant", "actual", "dishes"})
+@ToString(callSuper = true, exclude = {"dishes"})
 public class Menu extends BaseNamedEntity {
 
     @ManyToOne
@@ -22,5 +26,9 @@ public class Menu extends BaseNamedEntity {
     @NotNull
     @Column(name = Meta.Menu.ACTUAL)
     private Boolean actual;
+
+    @OneToMany(mappedBy = "menu", fetch = LAZY, cascade = {PERSIST, MERGE, REFRESH})
+    @OrderBy("name")
+    private List<Dish> dishes;
 
 }
