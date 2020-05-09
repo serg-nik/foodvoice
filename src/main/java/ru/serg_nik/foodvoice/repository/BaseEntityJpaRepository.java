@@ -1,5 +1,7 @@
 package ru.serg_nik.foodvoice.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,11 +21,15 @@ public interface BaseEntityJpaRepository<T extends BaseEntity> extends JpaReposi
     List<T> findAll();
 
     @Override
+    @Query("SELECT e FROM #{#entityName} e WHERE e.status = 1")
+    Page<T> findAll(Pageable pageable);
+
+    @Override
     @Query("SELECT e FROM #{#entityName} e WHERE e.id = :id AND e.status = 1")
     Optional<T> findById(@Param("id") UUID id);
 
     @Query("SELECT e FROM #{#entityName} e WHERE e.status IN (1, 2)")
-    List<T> findAllWithNotActive();
+    Page<T> findAllWithNotActive(Pageable pageable);
 
     @Query("SELECT e FROM #{#entityName} e WHERE e.id = :id AND e.status IN (1, 2)")
     Optional<T> findByIdWithNotActive(@Param("id") UUID id);

@@ -53,7 +53,8 @@ VALUES ('0151e05d-3185-4304-b9dd-9fc8f97db290', '2a9cf406-7f34-4cc7-a4d0-d4f1205
 INSERT INTO restaurant(uuid, name, address, email)
 VALUES ('58b3d8b0-7d08-4274-8aa8-68976d0582ee', 'Месье Колбасье', 'Город, Улица, дом', 'monsieur_sausage@foodvoice.ru'),
        ('01f8e5df-ac2e-4898-b72c-ac62123c21ed', 'Звери как звери', 'Город, Улица, дом',
-        'animals_like_animals@foodvoice.ru');
+        'animals_like_animals@foodvoice.ru'),
+       ('7c34d5b3-634f-4b75-abf3-49a40fcc18ec', 'Звери как звери', 'Адрес №2', 'animals_like_animals@foodvoice.ru');
 
 INSERT INTO restaurant(uuid, name, status, address, email)
 VALUES ('8bad8470-06bb-4b15-b98b-95745152875b', 'DELETED', 0, 'DELETED', 'DELETED@foodvoice.ru'),
@@ -88,9 +89,9 @@ VALUES ('07a09099-de81-4eb6-886e-18332dbdafa9', 'DELETED', 0, '7df4e03b-3058-447
 
 -- region voice
 INSERT INTO voice(uuid, user_uuid, date, menu_uuid)
-VALUES ('46acb07f-a6ca-42c0-9c7c-44a3e3aad71b', '0151e05d-3185-4304-b9dd-9fc8f97db290', '2020-05-05',
+VALUES ('46acb07f-a6ca-42c0-9c7c-44a3e3aad71b', '0151e05d-3185-4304-b9dd-9fc8f97db290', '2020-05-08',
         'dd0e6ec6-1532-4219-bab4-2e04a31b6a01'),
-       ('00813cff-8e50-4a74-9c85-bbbf90d026ae', 'f16eb5ea-14bc-42b0-809a-333639464730', '2020-05-05',
+       ('00813cff-8e50-4a74-9c85-bbbf90d026ae', 'f16eb5ea-14bc-42b0-809a-333639464730', '2020-05-09',
         '62e1e74e-ecd7-4d82-a41a-325f91aeddf1');
 
 INSERT INTO voice(uuid, status, user_uuid, date, menu_uuid)

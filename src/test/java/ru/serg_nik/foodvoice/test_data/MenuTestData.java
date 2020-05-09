@@ -20,8 +20,8 @@ public final class MenuTestData extends BaseNamedEntityTestData<Menu> {
     public static final Menu MENU_2 = new Menu();
     public static final Menu MENU_DELETED = new Menu();
     public static final Menu MENU_NOT_ACTIVE = new Menu();
-    public static final List<Menu> MENUS = List.of(MENU_1, MENU_2);
-    public static final List<Menu> MENUS_WITH_NOT_ACTIVE = List.of(MENU_1, MENU_2, MENU_NOT_ACTIVE);
+    public static final List<Menu> MENUS = List.of(MENU_2, MENU_1);
+    public static final List<Menu> MENUS_WITH_NOT_ACTIVE = List.of(MENU_NOT_ACTIVE, MENU_2, MENU_1);
 
     static {
         MENU_1.setId(UUID.fromString("dd0e6ec6-1532-4219-bab4-2e04a31b6a01"));

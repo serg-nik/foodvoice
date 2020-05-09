@@ -21,7 +21,7 @@ public final class UserTestData extends BaseNamedEntityTestData<User> {
     public static final User USER_DELETED = new User();
     public static final User USER_NOT_ACTIVE = new User();
     public static final List<User> USERS = List.of(ADMIN, USER);
-    public static final List<User> USERS_WITH_NOT_ACTIVE = List.of(ADMIN, USER, USER_NOT_ACTIVE);
+    public static final List<User> USERS_WITH_NOT_ACTIVE = List.of(USER_NOT_ACTIVE, ADMIN, USER);
 
     static {
         ADMIN.setId(UUID.fromString("0151e05d-3185-4304-b9dd-9fc8f97db290"));

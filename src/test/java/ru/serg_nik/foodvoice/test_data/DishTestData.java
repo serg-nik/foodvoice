@@ -24,9 +24,9 @@ public final class DishTestData extends BaseNamedEntityTestData<Dish> {
     public static final Dish DISH_8 = new Dish();
     public static final Dish DISH_DELETED = new Dish();
     public static final Dish DISH_NOT_ACTIVE = new Dish();
-    public static final List<Dish> DISHES = List.of(DISH_1, DISH_2, DISH_3, DISH_4, DISH_5, DISH_6, DISH_7, DISH_8);
+    public static final List<Dish> DISHES = List.of(DISH_1, DISH_8, DISH_6, DISH_4, DISH_7, DISH_2, DISH_5, DISH_3);
     public static final List<Dish> DISHES_WITH_NOT_ACTIVE = List.of(
-            DISH_1, DISH_2, DISH_3, DISH_4, DISH_5, DISH_6, DISH_7, DISH_8, DISH_NOT_ACTIVE
+            DISH_NOT_ACTIVE, DISH_1, DISH_8, DISH_6, DISH_4, DISH_7, DISH_2, DISH_5, DISH_3
     );
 
     static {
@@ -35,16 +35,22 @@ public final class DishTestData extends BaseNamedEntityTestData<Dish> {
         DISH_1.setMenu(MENU_1);
         DISH_1.setPrice(100_00L);
         DISH_2.setId(UUID.fromString("e43f72a2-0ee4-4f1f-9f61-ff3d185438ce"));
+        DISH_2.setName("Селёдка под шубой");
         DISH_3.setId(UUID.fromString("3007713f-223d-4d66-8d77-8ce0b9d97147"));
+        DISH_3.setName("ЩИ");
         DISH_4.setId(UUID.fromString("e8cf21e1-4de1-46a3-8f2c-bae6fc87c579"));
+        DISH_4.setName("Квас");
 
         DISH_5.setId(UUID.fromString("61c07aa6-3099-4e33-a29c-493e04f969f3"));
         DISH_5.setName("Цезарь");
         DISH_5.setMenu(MENU_2);
         DISH_5.setPrice(100_00L);
         DISH_6.setId(UUID.fromString("d15c5f85-cfdf-43d1-a648-d9560031e452"));
+        DISH_6.setName("Грильята");
         DISH_7.setId(UUID.fromString("1e471d70-e992-41d2-a98f-490a9dc916b0"));
+        DISH_7.setName("Пицца");
         DISH_8.setId(UUID.fromString("46a22c10-d830-456c-b62c-7f8395cfaf3d"));
+        DISH_8.setName("Вино");
 
         DISH_DELETED.setId(UUID.fromString("07a09099-de81-4eb6-886e-18332dbdafa9"));
         DISH_DELETED.setName("DELETED");

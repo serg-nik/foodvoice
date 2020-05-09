@@ -2,6 +2,8 @@ package ru.serg_nik.foodvoice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import ru.serg_nik.foodvoice.BaseTest;
 import ru.serg_nik.foodvoice.model.BaseEntity;
 import ru.serg_nik.foodvoice.test_data.BaseEntityTestData;
@@ -17,10 +19,13 @@ abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTes
 
     protected final BaseEntityJpaRepository<T> repository;
     protected final BaseEntityTestData<T> testData;
+    protected final PageRequest pageRequest;
 
-    BaseEntityJpaRepositoryTest(BaseEntityJpaRepository<T> repository, BaseEntityTestData<T> testData) {
+    BaseEntityJpaRepositoryTest(BaseEntityJpaRepository<T> repository, BaseEntityTestData<T> testData,
+                                PageRequest pageRequest) {
         this.repository = repository;
         this.testData = testData;
+        this.pageRequest = pageRequest;
     }
 
     @Test
@@ -85,16 +90,16 @@ abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTes
 
     @Test
     void findAllActive() {
-        List<T> activeList = repository.findAll();
-        assertEquals(testData.getAll().size(), activeList.size());
-        assertTrue(testData.getAll().containsAll(activeList));
+        Page<T> page = repository.findAll(pageRequest);
+        assertEquals(testData.getAll().size(), page.getContent().size());
+        containsAllWithSorting(testData.getAll(), page.getContent());
     }
 
     @Test
     void findAllNotActive() {
-        List<T> notActiveList = repository.findAllWithNotActive();
-        assertEquals(testData.getAllWithNotActive().size(), notActiveList.size());
-        assertTrue(testData.getAllWithNotActive().containsAll(notActiveList));
+        Page<T> page = repository.findAllWithNotActive(pageRequest);
+        assertEquals(testData.getAllWithNotActive().size(), page.getContent().size());
+        containsAllWithSorting(testData.getAllWithNotActive(), page.getContent());
     }
 
     @Test
@@ -115,6 +120,12 @@ abstract class BaseEntityJpaRepositoryTest<T extends BaseEntity> extends BaseTes
         assertFalse(repository.findAll().isEmpty());
         repository.deleteAll();
         assertTrue(repository.findAll().isEmpty());
+    }
+
+    private void containsAllWithSorting(List<T> expected, List<T> actual) {
+        for (int i = 0; i < expected.size(); i++) {
+            assertEquals(expected.get(i), actual.get(i));
+        }
     }
 
 }

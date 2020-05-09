@@ -15,11 +15,12 @@ public final class RestaurantTestData extends BaseNamedEntityTestData<Restaurant
 
     public static final Restaurant RESTAURANT_1 = new Restaurant();
     public static final Restaurant RESTAURANT_2 = new Restaurant();
+    public static final Restaurant RESTAURANT_3 = new Restaurant();
     public static final Restaurant RESTAURANT_DELETED = new Restaurant();
     public static final Restaurant RESTAURANT_NOT_ACTIVE = new Restaurant();
-    public static final List<Restaurant> RESTAURANTS = List.of(RESTAURANT_1, RESTAURANT_2);
+    public static final List<Restaurant> RESTAURANTS = List.of(RESTAURANT_3, RESTAURANT_2, RESTAURANT_1);
     public static final List<Restaurant> RESTAURANTS_WITH_NOT_ACTIVE = List.of(
-            RESTAURANT_1, RESTAURANT_2, RESTAURANT_NOT_ACTIVE
+            RESTAURANT_NOT_ACTIVE, RESTAURANT_3, RESTAURANT_2, RESTAURANT_1
     );
 
     static {
@@ -32,6 +33,11 @@ public final class RestaurantTestData extends BaseNamedEntityTestData<Restaurant
         RESTAURANT_2.setName("Звери как звери");
         RESTAURANT_2.setAddress("Город, Улица, дом");
         RESTAURANT_2.setEmail("animals_like_animals@foodvoice.ru");
+
+        RESTAURANT_3.setId(UUID.fromString("7c34d5b3-634f-4b75-abf3-49a40fcc18ec"));
+        RESTAURANT_3.setName("Звери как звери");
+        RESTAURANT_3.setAddress("Адрес №2");
+        RESTAURANT_3.setEmail("animals_like_animals@foodvoice.ru");
 
         RESTAURANT_DELETED.setId(UUID.fromString("8bad8470-06bb-4b15-b98b-95745152875b"));
         RESTAURANT_DELETED.setName("DELETED");

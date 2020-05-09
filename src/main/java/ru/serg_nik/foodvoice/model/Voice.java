@@ -3,26 +3,29 @@ package ru.serg_nik.foodvoice.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import ru.serg_nik.foodvoice.meta.Meta;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "voice", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_uuid", "date"})})
+@Table(name = Meta.Voice.TABLE_NAME,
+        uniqueConstraints = {@UniqueConstraint(columnNames = {Meta.Voice.USER_COLUMN, Meta.Voice.DATE})}
+)
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = {"user", "date", "menu"})
 @ToString(callSuper = true)
 public class Voice extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_uuid", updatable = false, nullable = false)
+    @JoinColumn(name = Meta.Voice.USER_COLUMN, updatable = false, nullable = false)
     private User user;
 
-    @Column(name = "date", insertable = false, updatable = false, nullable = false, columnDefinition = "DATE")
+    @Column(name = Meta.Voice.DATE, insertable = false, updatable = false, nullable = false, columnDefinition = "DATE")
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "menu_uuid", nullable = false)
+    @JoinColumn(name = Meta.Voice.MENU_COLUMN, nullable = false)
     private Menu menu;
 
 }

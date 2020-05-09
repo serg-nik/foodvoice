@@ -17,7 +17,7 @@ public final class RoleTestData extends BaseNamedEntityTestData<Role> {
     public static final Role ROLE_DELETED = new Role();
     public static final Role ROLE_NOT_ACTIVE = new Role();
     public static final List<Role> ROLES = List.of(ROLE_ADMIN, ROLE_USER);
-    public static final List<Role> ROLES_WITH_NOT_ACTIVE = List.of(ROLE_ADMIN, ROLE_USER, ROLE_NOT_ACTIVE);
+    public static final List<Role> ROLES_WITH_NOT_ACTIVE = List.of(ROLE_ADMIN, ROLE_NOT_ACTIVE, ROLE_USER);
 
     static {
         ROLE_ADMIN.setId(UUID.fromString("2a9cf406-7f34-4cc7-a4d0-d4f12056a9d9"));

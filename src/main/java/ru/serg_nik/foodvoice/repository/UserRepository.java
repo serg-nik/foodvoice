@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Transactional(readOnly = true)
-public interface UserRepository extends BaseNamedEntityJpaRepository<User> {
+public interface UserRepository extends BaseEntityJpaRepository<User> {
 
     @EntityGraph(attributePaths = {"roles"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id = :id")

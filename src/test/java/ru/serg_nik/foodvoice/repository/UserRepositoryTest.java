@@ -2,6 +2,9 @@ package ru.serg_nik.foodvoice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import ru.serg_nik.foodvoice.meta.Meta;
 import ru.serg_nik.foodvoice.model.User;
 import ru.serg_nik.foodvoice.test_data.UserTestData;
 
@@ -12,14 +15,16 @@ import static ru.serg_nik.foodvoice.test_data.RoleTestData.*;
 import static ru.serg_nik.foodvoice.test_data.UserTestData.ADMIN;
 import static ru.serg_nik.foodvoice.test_data.UserTestData.USER;
 
-class UserRepositoryTest extends BaseNamedEntityJpaRepositoryTest<User> {
+class UserRepositoryTest extends BaseEntityJpaRepositoryTest<User> {
 
     private final UserRepository userRepository;
     private final UserTestData userTestData;
 
     @Autowired
     UserRepositoryTest(UserRepository repository) {
-        super(repository, new UserTestData());
+        super(repository, new UserTestData(),
+                PageRequest.of(0, 10, Sort.by(Meta.User.NAME).and(Sort.by(Meta.User.ID_FIELD)))
+        );
         userRepository = repository;
         userTestData = (UserTestData) testData;
     }
