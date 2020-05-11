@@ -1,14 +1,16 @@
 package ru.serg_nik.foodvoice.service;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.serg_nik.foodvoice.dto.VoiceDto;
 import ru.serg_nik.foodvoice.model.Voice;
 import ru.serg_nik.foodvoice.repository.MenuRepository;
 import ru.serg_nik.foodvoice.repository.UserRepository;
 import ru.serg_nik.foodvoice.repository.VoiceRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -18,10 +20,11 @@ import java.util.concurrent.TimeoutException;
 @Slf4j
 public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
 
-    public static final LocalTime VOICE_CHANGE_STOP_TIME = LocalTime.of(11, 0);
-
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
+    @Getter
+    @Value("${food-voice.voice.change-stop-time}")
+    private LocalTime voiceChangeStopTime;
 
     @Autowired
     public VoiceService(VoiceRepository repository, UserRepository userRepository, MenuRepository menuRepository) {
@@ -32,30 +35,34 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
 
     @Override
     protected void prepareBeforeCreate(Voice entity) {
+        super.prepareBeforeCreate(entity);
         entity.setDate(LocalDate.now());
     }
 
-    @Override
-    protected void prepareBeforeUpdate(Voice entity) {
-    }
-
-    public VoiceDto vote(UUID userId, UUID menuId) {
+    public Voice vote(UUID userId, UUID menuId) {
         Voice voice = new Voice();
         voice.setUser(userRepository.getOne(userId));
         voice.setMenu(menuRepository.getOne(menuId));
-        return new VoiceDto(super.create(voice));
+        return super.create(voice);
     }
 
-    public VoiceDto changeVote(UUID id, UUID menuId) throws TimeoutException {
-        if (LocalTime.now().isAfter(VOICE_CHANGE_STOP_TIME)) {
+    private Voice get(UUID id, UUID userId) {
+        return repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Голос c id [%s] не найден пользователя с id [%s]", id, userId)
+                ));
+    }
+
+    public Voice changeVote(UUID id, UUID userId, UUID newMenuId) throws TimeoutException {
+        Voice voice = get(id, userId);
+        if (LocalDate.now().equals(voice.getCreated().toLocalDate()) && LocalTime.now().isAfter(voiceChangeStopTime)) {
             throw new TimeoutException("Истекло время, до которого можно было изменить выбор ресторана");
         }
-        Voice voice = get(id);
         if (voice.getId().equals(id)) {
-            return new VoiceDto(voice);
+            return voice;
         } else {
-            voice.setMenu(menuRepository.getOne(menuId));
-            return new VoiceDto(repository.save(voice));
+            voice.setMenu(menuRepository.getOne(newMenuId));
+            return repository.save(voice);
         }
     }
 

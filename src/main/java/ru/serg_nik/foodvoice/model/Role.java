@@ -3,6 +3,7 @@ package ru.serg_nik.foodvoice.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 import ru.serg_nik.foodvoice.meta.Meta;
 
 import javax.persistence.Entity;
@@ -14,5 +15,14 @@ import javax.persistence.UniqueConstraint;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Role extends BaseNamedEntity {
+public class Role extends BaseNamedEntity implements GrantedAuthority {
+
+    public static final String ADMIN = "ADMIN";
+    public static final String USER = "USER";
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + getName();
+    }
+
 }

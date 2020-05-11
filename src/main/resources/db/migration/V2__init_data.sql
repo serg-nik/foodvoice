@@ -22,12 +22,17 @@ WHERE uuid IS NOT NULL;
 
 -- region user
 INSERT INTO user(uuid, name, email, password)
-VALUES ('0151e05d-3185-4304-b9dd-9fc8f97db290', 'Администратор', 'admin@foodvoice.ru', ''),
-       ('f16eb5ea-14bc-42b0-809a-333639464730', 'Пользователь', 'user@foodvoice.ru', '');
+-- password
+VALUES ('0151e05d-3185-4304-b9dd-9fc8f97db290', 'Администратор', 'admin@foodvoice.ru',
+        '$2a$10$hyWbYTkvbBw7EvI0q9VMyuwvzMfaYtYO1SR01z4fLcPlfLpGpfuzS'),
+       ('f16eb5ea-14bc-42b0-809a-333639464730', 'Пользователь', 'user@foodvoice.ru',
+        '$2a$10$hyWbYTkvbBw7EvI0q9VMyuwvzMfaYtYO1SR01z4fLcPlfLpGpfuzS');
 
 INSERT INTO user(uuid, name, status, email, password)
-VALUES ('dfa59084-ff1d-4386-a801-fa6f75ccc2c7', 'DELETED', 0, 'DELETED@foodvoice.ru', ''),
-       ('acd6aa59-c7f8-4c0f-9b94-18ecc1381cc5', 'NOT_ACTIVE', 2, 'NOT_ACTIVE@foodvoice.ru', '');
+VALUES ('dfa59084-ff1d-4386-a801-fa6f75ccc2c7', 'DELETED', 0, 'DELETED@foodvoice.ru',
+        '$2a$10$hyWbYTkvbBw7EvI0q9VMyuwvzMfaYtYO1SR01z4fLcPlfLpGpfuzS'),
+       ('acd6aa59-c7f8-4c0f-9b94-18ecc1381cc5', 'NOT_ACTIVE', 2, 'NOT_ACTIVE@foodvoice.ru',
+        '$2a$10$hyWbYTkvbBw7EvI0q9VMyuwvzMfaYtYO1SR01z4fLcPlfLpGpfuzS');
 -- endregion
 
 -- region role

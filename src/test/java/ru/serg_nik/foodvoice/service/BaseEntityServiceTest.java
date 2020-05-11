@@ -16,7 +16,7 @@ abstract class BaseEntityServiceTest
     protected final S service;
     protected final T testData;
 
-    public BaseEntityServiceTest(S service, T testData) {
+    BaseEntityServiceTest(S service, T testData) {
         this.service = service;
         this.testData = testData;
     }

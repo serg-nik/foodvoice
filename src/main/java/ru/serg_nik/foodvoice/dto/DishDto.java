@@ -1,18 +1,19 @@
 package ru.serg_nik.foodvoice.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import ru.serg_nik.foodvoice.model.Dish;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DishDto extends BaseNamedDto<Dish> {
 
     private UUID menuId;
+    @ApiModelProperty(position = 4, required = true, example = "100000")
     private Long price;
 
     public DishDto() {
@@ -23,6 +24,15 @@ public class DishDto extends BaseNamedDto<Dish> {
         super(entity);
         menuId = entity.getMenu().getId();
         price = entity.getPrice();
+    }
+
+    public UUID getMenuId() {
+        return menuId;
+    }
+
+    @ApiModelProperty(position = 3, hidden = true)
+    public void setMenuId(UUID menuId) {
+        this.menuId = menuId;
     }
 
 }

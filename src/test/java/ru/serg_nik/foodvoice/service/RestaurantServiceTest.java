@@ -15,15 +15,15 @@ import static ru.serg_nik.foodvoice.test_data.RestaurantTestData.RESTAURANTS_WIT
 class RestaurantServiceTest extends BaseEntityServiceTest<Restaurant, RestaurantService, RestaurantTestData> {
 
     @Autowired
-    public RestaurantServiceTest(RestaurantService service) {
+    RestaurantServiceTest(RestaurantService service) {
         super(service, new RestaurantTestData());
     }
 
     @Test
     void findAllWithActualMenus() {
-        List<RestaurantDto> expectedList = RESTAURANTS_WITH_ACTUAL_MENU.stream().map(RestaurantDto::new).collect(toList());
-        Page<RestaurantDto> actualPage = service.findAllWithActualMenus(testData.getPageable());
-        equalsWithSorting(expectedList, actualPage.getContent());
+        List<RestaurantDto> expected = RESTAURANTS_WITH_ACTUAL_MENU.stream().map(RestaurantDto::new).collect(toList());
+        Page<RestaurantDto> actualPage = service.getAllWithActualMenus(testData.getPageable());
+        equalsWithSorting(expected, actualPage.getContent());
     }
 
 }

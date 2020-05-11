@@ -33,6 +33,9 @@ public final class RestaurantTestData extends BaseNamedEntityTestData<Restaurant
             RESTAURANT_NOT_ACTIVE, RESTAURANT_3, RESTAURANT_2, RESTAURANT_1
     );
     public static final List<Restaurant> RESTAURANTS_WITH_ACTUAL_MENU = List.of(RESTAURANT_2, RESTAURANT_1);
+    public static final String NEW_RESTAURANT_NAME = "New";
+    public static final String NEW_RESTAURANT_ADDRESS = "New address";
+    public static final String NEW_RESTAURANT_EMAIL = "new@foodvoice.ru";
 
     static {
         RESTAURANT_1.setId(UUID.fromString("58b3d8b0-7d08-4274-8aa8-68976d0582ee"));
@@ -76,9 +79,9 @@ public final class RestaurantTestData extends BaseNamedEntityTestData<Restaurant
     @Override
     public Restaurant getNew() {
         Restaurant entity = new Restaurant();
-        entity.setName("New");
-        entity.setAddress("New address");
-        entity.setEmail("new@foodvoice.ru");
+        entity.setName(NEW_RESTAURANT_NAME);
+        entity.setAddress(NEW_RESTAURANT_ADDRESS);
+        entity.setEmail(NEW_RESTAURANT_EMAIL);
         entity.setMenus(List.of(new MenuTestData().getNew()));
         return entity;
     }

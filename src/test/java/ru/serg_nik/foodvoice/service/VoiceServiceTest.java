@@ -9,6 +9,7 @@ import ru.serg_nik.foodvoice.dto.VoiceDto;
 import ru.serg_nik.foodvoice.model.Voice;
 import ru.serg_nik.foodvoice.test_data.VoiceTestData;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalTime;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -16,14 +17,27 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static ru.serg_nik.foodvoice.service.VoiceService.VOICE_CHANGE_STOP_TIME;
 import static ru.serg_nik.foodvoice.test_data.VoiceTestData.VOICE_ADMIN;
 import static ru.serg_nik.foodvoice.test_data.VoiceTestData.VOICE_USER;
 
 class VoiceServiceTest extends BaseEntityServiceTest<Voice, VoiceService, VoiceTestData> {
 
+    static Stream<Arguments> initChangeVoteArguments() {
+        return Stream.of(
+                arguments(VOICE_USER, VOICE_USER.getUser().getId(), VOICE_ADMIN.getMenu().getId()),
+                arguments(VOICE_ADMIN, VOICE_ADMIN.getUser().getId(), VOICE_USER.getMenu().getId())
+        );
+    }
+
+    static Stream<Arguments> initChangeNotFoundVoteArguments() {
+        return Stream.of(
+                arguments(VOICE_USER, VOICE_ADMIN.getUser().getId(), VOICE_ADMIN.getMenu().getId()),
+                arguments(VOICE_ADMIN, VOICE_USER.getUser().getId(), VOICE_USER.getMenu().getId())
+        );
+    }
+
     @Autowired
-    public VoiceServiceTest(VoiceService service) {
+    VoiceServiceTest(VoiceService service) {
         super(service, new VoiceTestData());
     }
 
@@ -36,42 +50,42 @@ class VoiceServiceTest extends BaseEntityServiceTest<Voice, VoiceService, VoiceT
 
     @Test
     void vote() {
-        VoiceDto actual = assertDoesNotThrow(() ->
+        Voice voice = assertDoesNotThrow(() ->
                 service.vote(testData.getNew().getUser().getId(), testData.getNew().getMenu().getId())
         );
-        assertDoesNotThrow(() -> service.get(actual.getId()));
+        assertDoesNotThrow(() -> service.get(voice.getId()));
+        VoiceDto actual = new VoiceDto(voice);
         VoiceDto expected = new VoiceDto(testData.getNew());
         expected.setId(actual.getId());
         expected.setDate(actual.getDate());
         assertEquals(expected, actual);
     }
 
-    static Stream<Arguments> initChangeVoteArguments() {
-        return Stream.of(
-                arguments(VOICE_ADMIN, VOICE_ADMIN.getMenu().getId()),
-                arguments(VOICE_ADMIN, VOICE_USER.getMenu().getId())
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("initChangeVoteArguments")
-    void changeVote(Voice entity, UUID menuId) throws TimeoutException {
-        if (LocalTime.now().isAfter(VOICE_CHANGE_STOP_TIME)) {
-            assertThrows(TimeoutException.class, () -> service.changeVote(entity.getId(), menuId));
+    void changeVote(Voice expected, UUID userId, UUID menuId) throws TimeoutException {
+        if (LocalTime.now().isAfter(service.getVoiceChangeStopTime())) {
+            assertThrows(TimeoutException.class, () -> service.changeVote(expected.getId(), userId, menuId));
         } else {
-            VoiceDto actual = service.changeVote(entity.getId(), menuId);
-            assertEquals(new VoiceDto(entity), actual);
+            Voice actual = service.changeVote(expected.getId(), userId, menuId);
+            assertEquals(new VoiceDto(expected), new VoiceDto(actual));
         }
     }
 
     @ParameterizedTest
     @MethodSource("initChangeVoteArguments")
-    void wrongChangeVote(Voice entity, UUID menuId) {
-        if (LocalTime.now().isBefore(VOICE_CHANGE_STOP_TIME)) {
-            assertDoesNotThrow(() -> service.changeVote(entity.getId(), menuId));
+    void wrongChangeVote(Voice entity, UUID userId, UUID menuId) {
+        if (LocalTime.now().isBefore(service.getVoiceChangeStopTime())) {
+            assertDoesNotThrow(() -> service.changeVote(entity.getId(), userId, menuId));
         } else {
-            assertThrows(TimeoutException.class, () -> service.changeVote(entity.getId(), menuId));
+            assertThrows(TimeoutException.class, () -> service.changeVote(entity.getId(), userId, menuId));
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("initChangeNotFoundVoteArguments")
+    void changeVoteNotFound(Voice expected, UUID userId, UUID menuId) {
+        assertThrows(EntityNotFoundException.class, () -> service.changeVote(expected.getId(), userId, menuId));
     }
 
 }

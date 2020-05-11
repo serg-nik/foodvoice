@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.serg_nik.foodvoice.model.Role;
 import ru.serg_nik.foodvoice.test_data.RoleTestData;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static java.util.Collections.singleton;
+import static org.junit.jupiter.api.Assertions.*;
+import static ru.serg_nik.foodvoice.util.SetUtils.getById;
 
 class RoleRepositoryTest extends BaseEntityJpaRepositoryTest<Role, RoleRepository, RoleTestData> {
 
@@ -18,29 +22,50 @@ class RoleRepositoryTest extends BaseEntityJpaRepositoryTest<Role, RoleRepositor
 
     @Test
     void findFirstActiveByName() {
-        Optional<Role> optional = repository.findByName(testData.getFirstActive().getName());
-        assertTrue(optional.isPresent());
-        assertTrue(testData.equals(testData.getFirstActive(), optional.get()));
+        Role expectedRole = testData.getFirstActive();
+        Set<Role> roles = repository.findByNameIsIn(
+                singleton(expectedRole.getName())
+        );
+        assertNotNull(roles);
+        assertFalse(roles.isEmpty());
+        Optional<Role> optionalRole = getById(roles, expectedRole.getId());
+        assertTrue(optionalRole.isPresent());
+        assertTrue(testData.equals(expectedRole, optionalRole.get()));
     }
 
     @Test
     void findSecondActiveByName() {
-        Optional<Role> optional = repository.findByName(testData.getSecondActive().getName());
-        assertTrue(optional.isPresent());
-        assertTrue(testData.equals(testData.getSecondActive(), optional.get()));
+        Role expectedRole = testData.getSecondActive();
+        Set<Role> roles = repository.findByNameIsIn(
+                singleton(expectedRole.getName())
+        );
+        assertNotNull(roles);
+        assertFalse(roles.isEmpty());
+        Optional<Role> optionalRole = getById(roles, expectedRole.getId());
+        assertTrue(optionalRole.isPresent());
+        assertTrue(testData.equals(expectedRole, optionalRole.get()));
     }
 
     @Test
     void notFoundNotActiveByName() {
-        Optional<Role> optional = repository.findByName(testData.getNotActive().getName());
-        assertTrue(optional.isEmpty());
+        Set<Role> roles = repository.findByNameIsIn(
+                singleton(testData.getNotActive().getName())
+        );
+        assertNotNull(roles);
+        assertTrue(roles.isEmpty());
     }
 
     @Test
     void findNotActiveByName() {
-        Optional<Role> optional = repository.findByNameWithNotActive(testData.getNotActive().getName());
-        assertTrue(optional.isPresent());
-        assertTrue(testData.equals(testData.getNotActive(), optional.get()));
+        Role expectedRole = testData.getNotActive();
+        Set<Role> roles = repository.findByNameIsInWithNotActive(
+                singleton(expectedRole.getName())
+        );
+        assertNotNull(roles);
+        assertFalse(roles.isEmpty());
+        Optional<Role> optionalRole = getById(roles, expectedRole.getId());
+        assertTrue(optionalRole.isPresent());
+        assertTrue(testData.equals(expectedRole, optionalRole.get()));
     }
 
 }

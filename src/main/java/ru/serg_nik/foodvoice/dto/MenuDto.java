@@ -1,8 +1,7 @@
 package ru.serg_nik.foodvoice.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import ru.serg_nik.foodvoice.model.Menu;
 
 import java.util.List;
@@ -10,13 +9,15 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MenuDto extends BaseNamedDto<Menu> {
 
     private UUID restaurantId;
-    private List<DishDto> dishes;
+    @ApiModelProperty(position = 4)
+    private List<DishDto> dishes = List.of();
 
     public MenuDto() {
         super();
@@ -26,6 +27,15 @@ public class MenuDto extends BaseNamedDto<Menu> {
         super(entity);
         restaurantId = entity.getRestaurant().getId();
         dishes = entity.getDishes().stream().map(DishDto::new).collect(toList());
+    }
+
+    public UUID getRestaurantId() {
+        return restaurantId;
+    }
+
+    @ApiModelProperty(position = 3, hidden = true)
+    public void setRestaurantId(UUID restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
 }

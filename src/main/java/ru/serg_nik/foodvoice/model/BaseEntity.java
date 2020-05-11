@@ -29,7 +29,9 @@ public abstract class BaseEntity implements Serializable {
     private UUID id;
 
     @CreatedDate
-    @Column(name = Meta.BaseEntity.CREATED, updatable = false, nullable = false)
+    @Column(name = Meta.BaseEntity.CREATED, updatable = false, nullable = false,
+            columnDefinition = "SMALLINT DEFAULT now() NOT NULL"
+    )
     private LocalDateTime created;
 
     @LastModifiedDate

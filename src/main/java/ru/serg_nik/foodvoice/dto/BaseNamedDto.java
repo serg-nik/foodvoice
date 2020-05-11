@@ -1,15 +1,16 @@
 package ru.serg_nik.foodvoice.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import ru.serg_nik.foodvoice.model.BaseNamedEntity;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class BaseNamedDto<E extends BaseNamedEntity> extends BaseDto<E> {
 
+    @ApiModelProperty(position = 2, required = true, example = "name")
     private String name;
 
     public BaseNamedDto() {
