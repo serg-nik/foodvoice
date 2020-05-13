@@ -10,6 +10,7 @@ import ru.serg_nik.foodvoice.repository.MenuRepository;
 import ru.serg_nik.foodvoice.repository.UserRepository;
 import ru.serg_nik.foodvoice.repository.VoiceRepository;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,15 +23,21 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
 
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
-    @Getter
     @Value("${food-voice.voice.change-stop-time}")
-    private LocalTime voiceChangeStopTime;
+    private String voiceChangeStopTime;
+    @Getter
+    private LocalTime voiceChangeStopLocalTime;
 
     @Autowired
     public VoiceService(VoiceRepository repository, UserRepository userRepository, MenuRepository menuRepository) {
         super(repository);
         this.userRepository = userRepository;
         this.menuRepository = menuRepository;
+    }
+
+    @PostConstruct
+    protected void init() {
+        voiceChangeStopLocalTime = LocalTime.parse(voiceChangeStopTime);
     }
 
     @Override
@@ -55,7 +62,8 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
 
     public Voice changeVote(UUID id, UUID userId, UUID newMenuId) throws TimeoutException {
         Voice voice = get(id, userId);
-        if (LocalDate.now().equals(voice.getCreated().toLocalDate()) && LocalTime.now().isAfter(voiceChangeStopTime)) {
+        if (LocalDate.now().equals(voice.getCreated().toLocalDate())
+                && LocalTime.now().isAfter(voiceChangeStopLocalTime)) {
             throw new TimeoutException("Истекло время, до которого можно было изменить выбор ресторана");
         }
         if (voice.getId().equals(id)) {

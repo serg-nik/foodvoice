@@ -64,7 +64,7 @@ class VoiceServiceTest extends BaseEntityServiceTest<Voice, VoiceService, VoiceT
     @ParameterizedTest
     @MethodSource("initChangeVoteArguments")
     void changeVote(Voice expected, UUID userId, UUID menuId) throws TimeoutException {
-        if (LocalTime.now().isAfter(service.getVoiceChangeStopTime())) {
+        if (LocalTime.now().isAfter(service.getVoiceChangeStopLocalTime())) {
             assertThrows(TimeoutException.class, () -> service.changeVote(expected.getId(), userId, menuId));
         } else {
             Voice actual = service.changeVote(expected.getId(), userId, menuId);
@@ -75,7 +75,7 @@ class VoiceServiceTest extends BaseEntityServiceTest<Voice, VoiceService, VoiceT
     @ParameterizedTest
     @MethodSource("initChangeVoteArguments")
     void wrongChangeVote(Voice entity, UUID userId, UUID menuId) {
-        if (LocalTime.now().isBefore(service.getVoiceChangeStopTime())) {
+        if (LocalTime.now().isBefore(service.getVoiceChangeStopLocalTime())) {
             assertDoesNotThrow(() -> service.changeVote(entity.getId(), userId, menuId));
         } else {
             assertThrows(TimeoutException.class, () -> service.changeVote(entity.getId(), userId, menuId));
