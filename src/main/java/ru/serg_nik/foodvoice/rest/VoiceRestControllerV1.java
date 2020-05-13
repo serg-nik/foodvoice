@@ -3,6 +3,8 @@ package ru.serg_nik.foodvoice.rest;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,11 @@ import static ru.serg_nik.foodvoice.rest.VoiceRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
 public class VoiceRestControllerV1 {
 
     public static final String REQUEST_URI = "/api/v1/voices/";
+    public static final String MY = "/api/v1/voices/my";
 
     private final VoiceService service;
     private final AuthService authService;
@@ -69,6 +72,15 @@ public class VoiceRestControllerV1 {
                     .status(HttpStatus.CONFLICT)
                     .body(e.getMessage());
         }
+    }
+
+    @GetMapping(MY)
+    @ApiOperation(value = "Находит историю выбора ресторанов, требуется авторизация с ролью \"USER\" по \"Bearer_\" ->",
+            notes = "В результате успешного выполнения запроса возвращается массив JSON-объектов голосов с пагинацией"
+    )
+    public Page<VoiceDto> getMyVoices(Pageable pageable) {
+        return service.getAllAllByUserId(authService.getAuthUser().getId(), pageable)
+                .map(VoiceDto::new);
     }
 
 }

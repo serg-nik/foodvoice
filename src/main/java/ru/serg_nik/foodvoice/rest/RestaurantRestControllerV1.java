@@ -46,7 +46,8 @@ public class RestaurantRestControllerV1 {
             notes = "В результате успешного выполнения запроса возвращается массив JSON-объектов ресторанов с пагинацией"
     )
     public Page<RestaurantDto> getAllWithActualMenus(Pageable pageable) {
-        return service.getAllWithActualMenus(pageable);
+        return service.getAllWithActualMenus(pageable)
+                .map(RestaurantDto::new);
     }
 
 }

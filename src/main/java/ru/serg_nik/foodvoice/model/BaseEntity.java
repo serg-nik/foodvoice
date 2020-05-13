@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static ru.serg_nik.foodvoice.model.Status.ACTIVE;
+
 @MappedSuperclass
 @Data
 @EqualsAndHashCode(exclude = {"created", "updated", "status"})
@@ -42,6 +44,6 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = Meta.BaseEntity.STATUS, insertable = false, nullable = false,
             columnDefinition = "SMALLINT DEFAULT 1 NOT NULL"
     )
-    private Status status;
+    private Status status = ACTIVE;
 
 }

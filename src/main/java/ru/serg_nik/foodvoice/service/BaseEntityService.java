@@ -41,11 +41,16 @@ public abstract class BaseEntityService<E extends BaseEntity, R extends BaseEnti
     }
 
     public E create(E entity) {
-        log.info("Создание сущности [{}]", entity);
-        prepareBeforeCreate(entity);
-        entity = repository.save(entity);
-        log.info("Создана новая сущность с типом [{}] и id [{}]", entity.getClass().getName(), entity.getId());
-        return entity;
+        try {
+            log.info("Создание сущности [{}]", entity);
+            prepareBeforeCreate(entity);
+            entity = repository.save(entity);
+            log.info("Создана новая сущность с типом [{}] и id [{}]", entity.getClass().getName(), entity.getId());
+            return entity;
+        } catch (Exception e) {
+            log.error("Произошла ошибка при создании сущности [{}]: [{}]", entity, e.getMessage());
+            throw e;
+        }
     }
 
     protected void prepareBeforeUpdate(UUID id, E entity) {
@@ -61,17 +66,27 @@ public abstract class BaseEntityService<E extends BaseEntity, R extends BaseEnti
     }
 
     public E update(UUID id, E entity) {
-        log.info("Обновление сущности с типом [{}] и id [{}]", entity.getClass().getName(), entity.getId());
-        prepareBeforeUpdate(id, entity);
-        entity = repository.save(entity);
-        return entity;
+        try {
+            log.info("Обновление сущности с типом [{}] и id [{}]", entity.getClass().getName(), entity.getId());
+            prepareBeforeUpdate(id, entity);
+            entity = repository.save(entity);
+            return entity;
+        } catch (Exception e) {
+            log.error("Произошла ошибка при обновлении сущности [{}] по id [{}]: [{}]", entity, id, e.getMessage());
+            throw e;
+        }
     }
 
     public void delete(UUID id) {
-        log.info("Удаление сущности с id [{}]", id);
-        checkId(id);
-        repository.deleteById(id);
-        log.info("Произведено мягкое удаление сущности с id [{}]", id);
+        try {
+            log.info("Удаление сущности с id [{}]", id);
+            checkId(id);
+            repository.deleteById(id);
+            log.info("Произведено мягкое удаление сущности с id [{}]", id);
+        } catch (Exception e) {
+            log.error("Произошла ошибка при обновлении сущности по id [{}]: [{}]", id, e.getMessage());
+            throw e;
+        }
     }
 
 }

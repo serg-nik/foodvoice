@@ -1,6 +1,7 @@
 package ru.serg_nik.foodvoice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.serg_nik.foodvoice.dto.MenuDto;
@@ -24,8 +25,7 @@ public class MenuService extends BaseEntityService<Menu, MenuRepository> {
 
     public Menu entityOf(MenuDto dto, Restaurant restaurant) {
         Menu entity = new Menu();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
+        BeanUtils.copyProperties(dto, entity, "restaurantId", "dishes");
         entity.setRestaurant(restaurant);
         entity.setDishes(
                 dto.getDishes().stream()

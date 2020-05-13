@@ -22,7 +22,9 @@ class RestaurantServiceTest extends BaseEntityServiceTest<Restaurant, Restaurant
     @Test
     void findAllWithActualMenus() {
         List<RestaurantDto> expected = RESTAURANTS_WITH_ACTUAL_MENU.stream().map(RestaurantDto::new).collect(toList());
-        Page<RestaurantDto> actualPage = service.getAllWithActualMenus(testData.getPageable());
+        Page<RestaurantDto> actualPage =
+                service.getAllWithActualMenus(testData.getPageable())
+                        .map(RestaurantDto::new);
         equalsWithSorting(expected, actualPage.getContent());
     }
 

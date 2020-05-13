@@ -1,6 +1,7 @@
 package ru.serg_nik.foodvoice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.serg_nik.foodvoice.dto.RoleDto;
@@ -18,8 +19,7 @@ public class RoleService extends BaseEntityService<Role, RoleRepository> {
 
     public static Role entityOf(RoleDto dto) {
         Role entity = new Role();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
+        BeanUtils.copyProperties(dto, entity);
         return entity;
     }
 

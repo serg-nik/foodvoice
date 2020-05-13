@@ -18,7 +18,7 @@ import static ru.serg_nik.foodvoice.rest.RegisterRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
 public class RegisterRestControllerV1 {
 
     public static final String REQUEST_URI = "/api/v1/register/";
@@ -30,7 +30,7 @@ public class RegisterRestControllerV1 {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Регистрирует нового пользователя",
             notes = "В результате успешного выполнения запроса возвращается JSON-объект пользователя"
     )

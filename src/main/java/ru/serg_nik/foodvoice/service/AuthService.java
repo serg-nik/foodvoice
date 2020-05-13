@@ -30,7 +30,9 @@ public class AuthService implements UserDetailsService {
                     log.info("Пользователь с email [{}] успешно загружен", email);
                     return user;
                 })
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с email [" + email + "] не найден"));
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(String.format("Пользователь с email [%s] не найден", email))
+                );
     }
 
     public User getAuthUser() {

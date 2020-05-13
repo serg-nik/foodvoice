@@ -16,7 +16,7 @@ import static ru.serg_nik.foodvoice.rest.UserRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
 public class UserRestControllerV1 {
 
     public static final String REQUEST_URI = "/api/v1/users/";
@@ -28,7 +28,7 @@ public class UserRestControllerV1 {
         this.service = service;
     }
 
-    @PutMapping("{id}")
+    @PutMapping(value = "{id}", consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Обновляет существующего пользователя, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
             notes = "В результате успешного выполнения запроса возвращается JSON-объект пользователя"
     )

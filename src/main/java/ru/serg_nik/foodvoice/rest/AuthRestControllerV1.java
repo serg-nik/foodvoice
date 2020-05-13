@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.serg_nik.foodvoice.rest.AuthRestControllerV1.REQUEST_URI;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
 public class AuthRestControllerV1 {
 
     public static final String REQUEST_URI = "/api/v1/login/";
@@ -37,7 +37,7 @@ public class AuthRestControllerV1 {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Авторизует пользователя",
             notes = "В результате успешного выполнения запроса возвращается JSON-объект с email пользователя и токеном"
     )

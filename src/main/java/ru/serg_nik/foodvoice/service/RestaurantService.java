@@ -32,7 +32,7 @@ public class RestaurantService extends BaseEntityService<Restaurant, RestaurantR
 
     public Restaurant entityOf(RestaurantDto dto) {
         Restaurant entity = new Restaurant();
-        BeanUtils.copyProperties(dto, entity);
+        BeanUtils.copyProperties(dto, entity, "menus");
         entity.setMenus(
                 dto.getMenus().stream()
                         .map(menuDto -> menuService.entityOf(menuDto, entity))
@@ -60,10 +60,10 @@ public class RestaurantService extends BaseEntityService<Restaurant, RestaurantR
     }
 
     @Cacheable(RESTAURANTS_CACHE_NAME)
-    public Page<RestaurantDto> getAllWithActualMenus(Pageable pageable) {
+    public Page<Restaurant> getAllWithActualMenus(Pageable pageable) {
         Page<Restaurant> page = repository.findAllWithActualMenus(pageable);
         log.info("Найдено {} ресторана(ов) с меню дня", page.getTotalElements());
-        return page.map(RestaurantDto::new);
+        return page;
     }
 
 }

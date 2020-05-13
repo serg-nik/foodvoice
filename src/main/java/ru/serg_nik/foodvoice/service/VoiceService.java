@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.serg_nik.foodvoice.model.Voice;
 import ru.serg_nik.foodvoice.repository.MenuRepository;
@@ -53,13 +55,6 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
         return super.create(voice);
     }
 
-    private Voice get(UUID id, UUID userId) {
-        return repository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Голос c id [%s] не найден пользователя с id [%s]", id, userId)
-                ));
-    }
-
     public Voice changeVote(UUID id, UUID userId, UUID newMenuId) throws TimeoutException {
         Voice voice = get(id, userId);
         if (LocalDate.now().equals(voice.getCreated().toLocalDate())
@@ -72,6 +67,17 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
             voice.setMenu(menuRepository.getOne(newMenuId));
             return repository.save(voice);
         }
+    }
+
+    public Page<Voice> getAllAllByUserId(UUID userId, Pageable pageable) {
+        return repository.findAllByUserId(userId, pageable);
+    }
+
+    private Voice get(UUID id, UUID userId) {
+        return repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Голос c id [%s] не найден пользователя с id [%s]", id, userId)
+                ));
     }
 
 }
