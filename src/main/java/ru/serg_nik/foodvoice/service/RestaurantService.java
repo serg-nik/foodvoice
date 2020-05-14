@@ -21,9 +21,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class RestaurantService extends BaseEntityService<Restaurant, RestaurantRepository> {
 
-    private static final String CACHE = "restaurants";
-    private static final String CACHE_WITH_ACTUAL_MENUS = "restaurantsWithActualMenus";
-
     private final MenuService menuService;
 
     @Autowired
@@ -48,17 +45,17 @@ public class RestaurantService extends BaseEntityService<Restaurant, RestaurantR
     }
 
     @Override
-    @CacheEvict(value = {CACHE, CACHE_WITH_ACTUAL_MENUS}, allEntries = true)
+    @CacheEvict(value = {Cache.Restaurant.ALL, Cache.Restaurant.ALL_WITH_ACTUAL_MENUS}, allEntries = true)
     public Restaurant create(Restaurant entity) {
         return super.create(entity);
     }
 
-    @Cacheable(CACHE)
+    @Cacheable(Cache.Restaurant.ALL)
     public Page<Restaurant> getAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
-    @Cacheable(CACHE_WITH_ACTUAL_MENUS)
+    @Cacheable(Cache.Restaurant.ALL_WITH_ACTUAL_MENUS)
     public Page<Restaurant> getAllWithActualMenus(Pageable pageable) {
         Page<Restaurant> page = repository.findAllWithActualMenus(pageable);
         log.info("Найдено {} ресторана(ов) с меню дня", page.getTotalElements());
@@ -66,18 +63,18 @@ public class RestaurantService extends BaseEntityService<Restaurant, RestaurantR
     }
 
     @Override
-    @CacheEvict(value = {CACHE, CACHE_WITH_ACTUAL_MENUS}, allEntries = true)
+    @CacheEvict(value = {Cache.Restaurant.ALL, Cache.Restaurant.ALL_WITH_ACTUAL_MENUS}, allEntries = true)
     public Restaurant update(UUID id, Restaurant entity) {
         return super.update(id, entity);
     }
 
     @Override
-    @CacheEvict(value = {CACHE, CACHE_WITH_ACTUAL_MENUS}, allEntries = true)
+    @CacheEvict(value = {Cache.Restaurant.ALL, Cache.Restaurant.ALL_WITH_ACTUAL_MENUS}, allEntries = true)
     public void delete(UUID id) {
         super.delete(id);
     }
 
-    @CacheEvict(value = {CACHE, CACHE_WITH_ACTUAL_MENUS}, allEntries = true)
+    @CacheEvict(value = {Cache.Restaurant.ALL, Cache.Restaurant.ALL_WITH_ACTUAL_MENUS}, allEntries = true)
     public Menu addActualMenu(UUID id, Menu menu) {
         menu.setRestaurant(repository.getOne(id));
         return menuService.create(menu);

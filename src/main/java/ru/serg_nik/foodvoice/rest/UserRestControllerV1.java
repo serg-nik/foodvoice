@@ -11,8 +11,8 @@ import ru.serg_nik.foodvoice.service.UserService;
 
 import java.util.UUID;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
 @RequestMapping(value = RestResources.V1.User.URI, produces = APPLICATION_JSON_VALUE)
@@ -27,15 +27,13 @@ public class UserRestControllerV1 {
 
     @PutMapping(value = "{id}", consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Обновляет существующего пользователя, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
-            notes = "В результате успешного выполнения запроса возвращается JSON-объект пользователя"
+            notes = "В результате возвращается JSON-объект пользователя"
     )
+    @ResponseStatus(OK)
     public ResponseEntity<UserDto> update(@ApiParam(required = true, defaultValue = "f16eb5ea-14bc-42b0-809a-333639464730")
                                           @PathVariable("id") UUID id, @RequestBody UserDto userDto) {
         User updatedUser = service.update(id, service.entityOf(userDto));
-        userDto = new UserDto(updatedUser);
-        return ResponseEntity
-                .created(getUriNewResource(RestResources.V1.User.URI, userDto.getId()))
-                .body(userDto);
+        return ResponseEntity.ok(new UserDto(updatedUser));
     }
 
 }

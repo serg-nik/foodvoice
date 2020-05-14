@@ -9,6 +9,8 @@ import ru.serg_nik.foodvoice.model.Dish;
 import ru.serg_nik.foodvoice.model.Menu;
 import ru.serg_nik.foodvoice.repository.MenuRepository;
 
+import java.util.UUID;
+
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -36,6 +38,10 @@ public class MenuService extends BaseEntityService<Menu, MenuRepository> {
                         .collect(toList())
         );
         return entity;
+    }
+
+    public void makeActual(UUID id, Boolean actual) {
+        repository.makeActual(id, actual);
     }
 
 }

@@ -3,6 +3,7 @@ package ru.serg_nik.foodvoice.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.serg_nik.foodvoice.dto.RegisterRequestDto;
@@ -13,6 +14,7 @@ import ru.serg_nik.foodvoice.repository.RoleRepository;
 import ru.serg_nik.foodvoice.repository.UserRepository;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Collections.singleton;
 import static java.util.Objects.isNull;
@@ -50,6 +52,24 @@ public class UserService extends BaseEntityService<User, UserRepository> {
             }
         }
         return entity;
+    }
+
+    @Override
+    @CacheEvict(value = {Cache.User.BY_EMAIL}, allEntries = true)
+    public User create(User entity) {
+        return super.create(entity);
+    }
+
+    @Override
+    @CacheEvict(value = {Cache.User.BY_EMAIL}, allEntries = true)
+    public User update(UUID id, User entity) {
+        return super.update(id, entity);
+    }
+
+    @Override
+    @CacheEvict(value = {Cache.User.BY_EMAIL}, allEntries = true)
+    public void delete(UUID id) {
+        super.delete(id);
     }
 
     private void enrich(User user, Set<String> roles) {

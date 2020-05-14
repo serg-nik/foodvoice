@@ -16,6 +16,8 @@ import ru.serg_nik.foodvoice.service.RestaurantService;
 
 import java.util.UUID;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
@@ -34,8 +36,9 @@ public class RestaurantRestControllerV1 {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Добавляет новый ресторан, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
-            notes = "В результате успешного выполнения запроса возвращается JSON-объект ресторана"
+            notes = "В результате возвращается JSON-объект ресторана"
     )
+    @ResponseStatus(CREATED)
     public ResponseEntity<RestaurantDto> create(@ApiParam(name = "requestBody", required = true)
                                                 @RequestBody RestaurantDto restaurantDto) {
         Restaurant restaurant = service.create(service.entityOf(restaurantDto));
@@ -44,10 +47,37 @@ public class RestaurantRestControllerV1 {
                 .body(new RestaurantDto(restaurant));
     }
 
+    @GetMapping("{id}")
+    @ApiOperation(value = "Находит ресторан", notes = "В результате возвращается JSON-объект ресторана")
+    @ResponseStatus(OK)
+    public ResponseEntity<RestaurantDto> get(@ApiParam(required = true, defaultValue = "58b3d8b0-7d08-4274-8aa8-68976d0582ee")
+                                             @PathVariable UUID id) {
+        return ResponseEntity.ok(new RestaurantDto(service.get(id)));
+    }
+
+    @GetMapping
+    @ApiOperation(value = "Находит все рестораны с их меню",
+            notes = "В результате возвращается массив JSON-объектов ресторанов с пагинацией"
+    )
+    @ResponseStatus(OK)
+    public Page<RestaurantDto> getAll(Pageable pageable) {
+        return service.getAll(pageable).map(RestaurantDto::new);
+    }
+
+    @GetMapping(RestResources.V1.Restaurant.MENUS_ACTUAL)
+    @ApiOperation(value = "Находит все рестораны с их меню дня",
+            notes = "В результате возвращается массив JSON-объектов ресторанов с пагинацией"
+    )
+    @ResponseStatus(OK)
+    public Page<RestaurantDto> getAllWithActualMenus(Pageable pageable) {
+        return service.getAllWithActualMenus(pageable).map(RestaurantDto::new);
+    }
+
     @PostMapping(value = RestResources.V1.Restaurant.ADD_ACTUAL_MENU, consumes = APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Добавляет новое меню дня ресторана, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
-            notes = "В результате успешного выполнения запроса возвращается JSON-объект меню"
+            notes = "В результате возвращается JSON-объект меню"
     )
+    @ResponseStatus(CREATED)
     public ResponseEntity<MenuDto> addActualMenu(@ApiParam(required = true, defaultValue = "58b3d8b0-7d08-4274-8aa8-68976d0582ee")
                                                  @PathVariable UUID id,
                                                  @ApiParam(name = "requestBody", required = true)
@@ -56,24 +86,6 @@ public class RestaurantRestControllerV1 {
         return ResponseEntity
                 .created(getUriNewResource(RestResources.V1.Menu.URI, actualMenu.getId()))
                 .body(new MenuDto(actualMenu));
-    }
-
-    @GetMapping
-    @ApiOperation(value = "Находит все рестораны с их меню",
-            notes = "В результате успешного выполнения запроса возвращается массив JSON-объектов ресторанов с пагинацией"
-    )
-    public Page<RestaurantDto> getAll(Pageable pageable) {
-        return service.getAll(pageable)
-                .map(RestaurantDto::new);
-    }
-
-    @GetMapping(RestResources.V1.Restaurant.MENUS_ACTUAL)
-    @ApiOperation(value = "Находит все рестораны с их меню дня",
-            notes = "В результате успешного выполнения запроса возвращается массив JSON-объектов ресторанов с пагинацией"
-    )
-    public Page<RestaurantDto> getAllWithActualMenus(Pageable pageable) {
-        return service.getAllWithActualMenus(pageable)
-                .map(RestaurantDto::new);
     }
 
 }

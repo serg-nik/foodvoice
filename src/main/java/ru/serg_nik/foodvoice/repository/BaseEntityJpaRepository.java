@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.serg_nik.foodvoice.model.BaseEntity;
 
 import java.util.List;
@@ -34,10 +35,12 @@ public interface BaseEntityJpaRepository<T extends BaseEntity> extends JpaReposi
     @Query("SELECT e FROM #{#entityName} e WHERE e.id = :id AND e.status IN (1, 2)")
     Optional<T> findByIdWithNotActive(@Param("id") UUID id);
 
+    @Transactional
     @Modifying
     @Query("UPDATE #{#entityName} e SET e.status = 0 WHERE e.id = :id")
     void deleteById(@Param("id") UUID id);
 
+    @Transactional
     @Modifying
     @Query("UPDATE #{#entityName} e SET e.status = 0")
     void deleteAll();

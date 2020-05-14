@@ -24,7 +24,7 @@ public final class RestResources {
         }
 
         public static class Menu {
-            public static final String URI = "/api/v1/restaurants/";
+            public static final String URI = "/api/v1/menus/";
         }
 
         public static class Voice {

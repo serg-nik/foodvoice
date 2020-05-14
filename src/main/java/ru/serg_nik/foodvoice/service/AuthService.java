@@ -2,6 +2,7 @@ package ru.serg_nik.foodvoice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class AuthService implements UserDetailsService {
     }
 
     @Override
+    @Cacheable(Cache.User.BY_EMAIL)
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmailWithRoles(email)
                 .map(user -> {

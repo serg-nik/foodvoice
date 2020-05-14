@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.serg_nik.foodvoice.dto.AuthRequestDto;
 import ru.serg_nik.foodvoice.dto.AuthResponseDto;
 import ru.serg_nik.foodvoice.security.jwt.JwtTokenProvider;
@@ -35,9 +32,8 @@ public class AuthRestControllerV1 {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Авторизует пользователя",
-            notes = "В результате успешного выполнения запроса возвращается JSON-объект с email пользователя и токеном"
-    )
+    @ApiOperation(value = "Авторизует пользователя", notes = "В результате возвращается JSON-объект с email и токеном")
+    @ResponseStatus(CREATED)
     public ResponseEntity<AuthResponseDto> login(@ApiParam(name = "requestBody", required = true)
                                                  @RequestBody AuthRequestDto authRequestDto) {
         String email = authRequestDto.getEmail();
