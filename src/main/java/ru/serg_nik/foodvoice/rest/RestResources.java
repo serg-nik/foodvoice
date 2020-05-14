@@ -19,7 +19,7 @@ public final class RestResources {
 
         public static class Restaurant {
             public static final String URI = "/api/v1/restaurants/";
-            public static final String ADD_ACTUAL_MENU = "{id}/menus/actual";
+            public static final String ADD_MENU = "{id}/menus";
             public static final String MENUS_ACTUAL = "menus/actual";
         }
 

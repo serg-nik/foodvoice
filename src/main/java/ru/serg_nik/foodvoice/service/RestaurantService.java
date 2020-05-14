@@ -75,7 +75,7 @@ public class RestaurantService extends BaseEntityService<Restaurant, RestaurantR
     }
 
     @CacheEvict(value = {Cache.Restaurant.ALL, Cache.Restaurant.ALL_WITH_ACTUAL_MENUS}, allEntries = true)
-    public Menu addActualMenu(UUID id, Menu menu) {
+    public Menu addMenu(UUID id, Menu menu) {
         menu.setRestaurant(repository.getOne(id));
         return menuService.create(menu);
     }

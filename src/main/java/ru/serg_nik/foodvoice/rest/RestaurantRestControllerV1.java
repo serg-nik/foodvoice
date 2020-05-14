@@ -73,16 +73,16 @@ public class RestaurantRestControllerV1 {
         return service.getAllWithActualMenus(pageable).map(RestaurantDto::new);
     }
 
-    @PostMapping(value = RestResources.V1.Restaurant.ADD_ACTUAL_MENU, consumes = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Добавляет новое меню дня ресторана, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
+    @PostMapping(value = RestResources.V1.Restaurant.ADD_MENU, consumes = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Добавляет новое меню ресторана, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
             notes = "В результате возвращается JSON-объект меню"
     )
     @ResponseStatus(CREATED)
-    public ResponseEntity<MenuDto> addActualMenu(@ApiParam(required = true, defaultValue = "58b3d8b0-7d08-4274-8aa8-68976d0582ee")
-                                                 @PathVariable UUID id,
-                                                 @ApiParam(name = "requestBody", required = true)
-                                                 @RequestBody MenuDto menuDto) {
-        Menu actualMenu = service.addActualMenu(id, menuService.entityOf(menuDto));
+    public ResponseEntity<MenuDto> addMenu(@ApiParam(required = true, defaultValue = "58b3d8b0-7d08-4274-8aa8-68976d0582ee")
+                                           @PathVariable UUID id,
+                                           @ApiParam(name = "requestBody", required = true)
+                                           @RequestBody MenuDto menuDto) {
+        Menu actualMenu = service.addMenu(id, menuService.entityOf(menuDto));
         return ResponseEntity
                 .created(getUriNewResource(RestResources.V1.Menu.URI, actualMenu.getId()))
                 .body(new MenuDto(actualMenu));
