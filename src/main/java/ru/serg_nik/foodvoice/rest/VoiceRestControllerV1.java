@@ -19,15 +19,11 @@ import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.serg_nik.foodvoice.rest.VoiceRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = RestResources.V1.Voice.URI, produces = APPLICATION_JSON_VALUE)
 public class VoiceRestControllerV1 {
-
-    public static final String REQUEST_URI = "/api/v1/voices/";
-    public static final String MY = "/api/v1/voices/my";
 
     private final VoiceService service;
     private final AuthService authService;
@@ -46,7 +42,7 @@ public class VoiceRestControllerV1 {
                                          @RequestBody VoiceRequestDto requestDto) {
         Voice voice = service.vote(authService.getAuthUser().getId(), requestDto.getMenuId());
         return ResponseEntity
-                .created(getUriNewResource(REQUEST_URI, voice.getId()))
+                .created(getUriNewResource(RestResources.V1.Voice.URI, voice.getId()))
                 .body(new VoiceDto(voice));
     }
 
@@ -61,7 +57,7 @@ public class VoiceRestControllerV1 {
         try {
             Voice voice = service.changeVote(id, authService.getAuthUser().getId(), requestDto.getMenuId());
             return ResponseEntity
-                    .created(getUriNewResource(REQUEST_URI, voice.getId()))
+                    .created(getUriNewResource(RestResources.V1.Voice.URI, voice.getId()))
                     .body(new VoiceDto(voice));
         } catch (EntityNotFoundException e) {
             return ResponseEntity
@@ -74,7 +70,7 @@ public class VoiceRestControllerV1 {
         }
     }
 
-    @GetMapping(MY)
+    @GetMapping(RestResources.V1.Voice.MY)
     @ApiOperation(value = "Находит историю выбора ресторанов, требуется авторизация с ролью \"USER\" по \"Bearer_\" ->",
             notes = "В результате успешного выполнения запроса возвращается массив JSON-объектов голосов с пагинацией"
     )

@@ -18,10 +18,9 @@ public class DishService extends BaseEntityService<Dish, DishRepository> {
         super(repository);
     }
 
-    public Dish entityOf(DishDto dto, Menu menu) {
+    public Dish entityOf(DishDto dto) {
         Dish entity = new Dish();
-        BeanUtils.copyProperties(dto, entity);
-        entity.setMenu(menu);
+        BeanUtils.copyProperties(dto, entity, "menuId");
         return entity;
     }
 

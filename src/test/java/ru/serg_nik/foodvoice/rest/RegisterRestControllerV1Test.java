@@ -12,7 +12,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.serg_nik.foodvoice.rest.RegisterRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.test_data.RoleTestData.ROLE_USER;
 import static ru.serg_nik.foodvoice.test_data.UserTestData.*;
 
@@ -23,7 +22,7 @@ class RegisterRestControllerV1Test extends BaseRestControllerTest {
         RegisterRequestDto requestDto = new RegisterRequestDto(NEW_USER_NAME, NEW_USER_EMAIL, NEW_USER_PASSWORD);
 
         ResultActions action =
-                perform(postBuilder(REQUEST_URI, APPLICATION_JSON, requestDto, null))
+                perform(postBuilder(RestResources.V1.Register.URI, APPLICATION_JSON, requestDto, null))
                         .andDo(print())
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));

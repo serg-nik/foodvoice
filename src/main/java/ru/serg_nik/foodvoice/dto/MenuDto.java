@@ -17,6 +17,8 @@ public class MenuDto extends BaseNamedDto<Menu> {
 
     private UUID restaurantId;
     @ApiModelProperty(position = 4)
+    private Boolean actual;
+    @ApiModelProperty(position = 4)
     private List<DishDto> dishes = List.of();
 
     public MenuDto() {
@@ -26,6 +28,7 @@ public class MenuDto extends BaseNamedDto<Menu> {
     public MenuDto(Menu entity) {
         super(entity);
         restaurantId = entity.getRestaurant().getId();
+        actual = entity.getActual();
         dishes = entity.getDishes().stream().map(DishDto::new).collect(toList());
     }
 

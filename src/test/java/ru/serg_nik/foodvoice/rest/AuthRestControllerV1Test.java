@@ -13,7 +13,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.serg_nik.foodvoice.rest.AuthRestControllerV1.REQUEST_URI;
 
 class AuthRestControllerV1Test extends BaseRestControllerTest {
 
@@ -26,7 +25,7 @@ class AuthRestControllerV1Test extends BaseRestControllerTest {
         AuthRequestDto requestDto = new AuthRequestDto(email, "password");
 
         ResultActions action =
-                perform(postBuilder(REQUEST_URI, APPLICATION_JSON, requestDto, null))
+                perform(postBuilder(RestResources.V1.Auth.URI, APPLICATION_JSON, requestDto, null))
                         .andDo(print())
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));

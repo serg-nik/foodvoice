@@ -12,14 +12,11 @@ import ru.serg_nik.foodvoice.service.UserService;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.serg_nik.foodvoice.rest.UserRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = RestResources.V1.User.URI, produces = APPLICATION_JSON_VALUE)
 public class UserRestControllerV1 {
-
-    public static final String REQUEST_URI = "/api/v1/users/";
 
     private final UserService service;
 
@@ -37,7 +34,7 @@ public class UserRestControllerV1 {
         User updatedUser = service.update(id, service.entityOf(userDto));
         userDto = new UserDto(updatedUser);
         return ResponseEntity
-                .created(getUriNewResource(REQUEST_URI, userDto.getId()))
+                .created(getUriNewResource(RestResources.V1.User.URI, userDto.getId()))
                 .body(userDto);
     }
 

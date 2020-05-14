@@ -76,7 +76,7 @@ public class VoiceService extends BaseEntityService<Voice, VoiceRepository> {
     private Voice get(UUID id, UUID userId) {
         return repository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Голос c id [%s] не найден пользователя с id [%s]", id, userId)
+                        String.format("Голос c id [%s] не найден для пользователя с id [%s]", id, userId)
                 ));
     }
 

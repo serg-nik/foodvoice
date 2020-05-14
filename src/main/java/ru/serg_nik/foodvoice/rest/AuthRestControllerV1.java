@@ -17,13 +17,10 @@ import ru.serg_nik.foodvoice.service.AuthService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.serg_nik.foodvoice.rest.AuthRestControllerV1.REQUEST_URI;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = RestResources.V1.Auth.URI, produces = APPLICATION_JSON_VALUE)
 public class AuthRestControllerV1 {
-
-    public static final String REQUEST_URI = "/api/v1/login/";
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;

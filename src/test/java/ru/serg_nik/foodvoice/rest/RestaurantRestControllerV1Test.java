@@ -14,8 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.serg_nik.foodvoice.model.Status.ACTIVE;
-import static ru.serg_nik.foodvoice.rest.RestaurantRestControllerV1.MENUS_ACTUAL;
-import static ru.serg_nik.foodvoice.rest.RestaurantRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.test_data.RestaurantTestData.*;
 import static ru.serg_nik.foodvoice.test_data.UserTestData.ADMIN;
 import static ru.serg_nik.foodvoice.test_data.UserTestData.USER;
@@ -33,7 +31,7 @@ class RestaurantRestControllerV1Test extends BaseRestControllerTest {
     @Test
     void create() throws Exception {
         ResultActions action =
-                perform(postBuilder(REQUEST_URI, APPLICATION_JSON, newRestaurantDto, ADMIN))
+                perform(postBuilder(RestResources.V1.Restaurant.URI, APPLICATION_JSON, newRestaurantDto, ADMIN))
                         .andDo(print())
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));
@@ -50,14 +48,14 @@ class RestaurantRestControllerV1Test extends BaseRestControllerTest {
 
     @Test
     void createForbiddenToUser() throws Exception {
-        perform(postBuilder(REQUEST_URI, APPLICATION_JSON, newRestaurantDto, USER))
+        perform(postBuilder(RestResources.V1.Restaurant.URI, APPLICATION_JSON, newRestaurantDto, USER))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void createForbiddenToAll() throws Exception {
-        perform(postBuilder(REQUEST_URI, APPLICATION_JSON, newRestaurantDto, null))
+        perform(postBuilder(RestResources.V1.Restaurant.URI, APPLICATION_JSON, newRestaurantDto, null))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -65,7 +63,7 @@ class RestaurantRestControllerV1Test extends BaseRestControllerTest {
     @Test
     void getAllWithActualMenus() throws Exception {
         ResultActions action =
-                perform(getBuilder(REQUEST_URI + MENUS_ACTUAL, APPLICATION_JSON))
+                perform(getBuilder(RestResources.V1.Restaurant.URI + RestResources.V1.Restaurant.MENUS_ACTUAL, APPLICATION_JSON))
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));

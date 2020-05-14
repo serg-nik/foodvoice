@@ -1,6 +1,8 @@
 package ru.serg_nik.foodvoice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.serg_nik.foodvoice.model.BaseEntity;
 import ru.serg_nik.foodvoice.repository.BaseEntityJpaRepository;
 
@@ -28,13 +30,6 @@ public abstract class BaseEntityService<E extends BaseEntity, R extends BaseEnti
         notNull(entity, "Сущность не может быть пустой (null)");
     }
 
-    public E get(UUID id) {
-        log.info("Поиск сущности по id [{}]", id);
-        checkId(id);
-        return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Сущность c id [%s] не найдена", id)));
-    }
-
     protected void prepareBeforeCreate(E entity) {
         checkIsPresent(entity);
         isNull(entity.getId(), String.format("У новой сущности не может быть id: [%s]", entity));
@@ -51,6 +46,20 @@ public abstract class BaseEntityService<E extends BaseEntity, R extends BaseEnti
             log.error("Произошла ошибка при создании сущности [{}]: [{}]", entity, e.getMessage());
             throw e;
         }
+    }
+
+    public E get(UUID id) {
+        log.info("Поиск сущности по id [{}]", id);
+        checkId(id);
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Сущность c id [%s] не найдена", id)));
+    }
+
+    public Page<E> getAll(Pageable pageable) {
+        log.info("Поиск всех сущностей");
+        Page<E> page = repository.findAll(pageable);
+        log.info("Найдено {} сущность(ей)", page.getSize());
+        return page;
     }
 
     protected void prepareBeforeUpdate(UUID id, E entity) {

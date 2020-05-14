@@ -14,14 +14,11 @@ import ru.serg_nik.foodvoice.model.User;
 import ru.serg_nik.foodvoice.service.UserService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.serg_nik.foodvoice.rest.RegisterRestControllerV1.REQUEST_URI;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
-@RequestMapping(value = REQUEST_URI, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = RestResources.V1.Register.URI, produces = APPLICATION_JSON_VALUE)
 public class RegisterRestControllerV1 {
-
-    public static final String REQUEST_URI = "/api/v1/register/";
 
     private final UserService service;
 
@@ -38,7 +35,7 @@ public class RegisterRestControllerV1 {
                                             @RequestBody RegisterRequestDto registerRequestDto) {
         User user = service.register(registerRequestDto);
         return ResponseEntity
-                .created(getUriNewResource(UserRestControllerV1.REQUEST_URI, user.getId()))
+                .created(getUriNewResource(RestResources.V1.User.URI, user.getId()))
                 .body(new UserDto(user));
     }
 
