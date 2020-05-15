@@ -19,6 +19,7 @@ import java.util.UUID;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static ru.serg_nik.foodvoice.rest.RestResources.V1.Restaurant.MENUS;
 import static ru.serg_nik.foodvoice.util.RestControllerUtils.getUriNewResource;
 
 @RestController
@@ -55,7 +56,7 @@ public class RestaurantRestControllerV1 {
         return ResponseEntity.ok(new RestaurantDto(service.get(id)));
     }
 
-    @GetMapping
+    @GetMapping(MENUS)
     @ApiOperation(value = "Находит все рестораны с их меню",
             notes = "В результате возвращается массив JSON-объектов ресторанов с пагинацией"
     )
@@ -73,8 +74,8 @@ public class RestaurantRestControllerV1 {
         return service.getAllWithActualMenus(pageable).map(RestaurantDto::new);
     }
 
-    @PostMapping(value = RestResources.V1.Restaurant.ADD_MENU, consumes = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Добавляет новое меню ресторана, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
+    @PostMapping(value = RestResources.V1.Restaurant.ADD_MENU_ACTUAL, consumes = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Добавляет новое меню дня ресторана, требуется авторизация с ролью \"ADMIN\" по \"Bearer_\" ->",
             notes = "В результате возвращается JSON-объект меню"
     )
     @ResponseStatus(CREATED)
