@@ -15,7 +15,7 @@
     <properties>
         <java.version>14</java.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
-        <spring.fox.version>2.9.2</spring.fox.version>
+        <spring.fox.version>2.10.0</spring.fox.version>
     </properties>
 
     <parent>
